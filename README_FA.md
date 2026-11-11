@@ -49,11 +49,6 @@ python3 -m http.server 8000     # سپس http://localhost:8000
 ```
 (`index.html` را با `file://` باز نکنید.)
 
-## انتشار روی GitHub Pages
-۱. محتوای مخزن را روی `main` push کنید.
-۲. *Settings ← Pages ← Deploy from a branch ← `main` / `(root)`*.
-۳. آدرس `https://<user>.github.io/<repo>/` را باز کنید. همهٔ مسیرها نسبی‌اند و `.nojekyll` وجود دارد؛ Build یا Backend لازم نیست.
-
 ## تست‌ها
 ```bash
 npm install && npx playwright install chromium
