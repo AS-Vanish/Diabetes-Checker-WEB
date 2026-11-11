@@ -50,10 +50,6 @@ python3 -m http.server 8000     # then open http://localhost:8000
 ```
 (Do not open `index.html` via `file://`; ES modules, `fetch` and WASM need HTTP.)
 
-## Deploy on GitHub Pages
-1. Push the repository content to `main`.
-2. *Settings → Pages → Build and deployment → Deploy from a branch → `main` / `(root)`*.
-3. Open `https://<user>.github.io/<repo>/`. All paths are relative and `.nojekyll` is included. No backend or build step is needed.
 
 ## Tests
 ```bash
