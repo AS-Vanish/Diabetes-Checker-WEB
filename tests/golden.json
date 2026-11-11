@@ -1,0 +1,117 @@
+{
+ "models": [
+  "decision_tree",
+  "random_forest",
+  "extra_trees",
+  "gradient_boosting",
+  "hist_gradient_boosting",
+  "adaboost",
+  "logistic_regression",
+  "svm_rbf",
+  "knn",
+  "gaussian_naive_bayes",
+  "mlp_neural_network"
+ ],
+ "cases": {
+  "sample_default": {
+   "input": [
+    6,
+    148,
+    72,
+    35,
+    null,
+    33.6,
+    0.627,
+    50
+   ],
+   "prob": {
+    "decision_tree": 0.6049548387527466,
+    "random_forest": 0.8390950560569763,
+    "extra_trees": 0.8040063977241516,
+    "gradient_boosting": 0.6696928143501282,
+    "hist_gradient_boosting": 0.8178566098213196,
+    "adaboost": 0.5190274119377136,
+    "logistic_regression": 0.7999629378318787,
+    "svm_rbf": 0.7956428527832031,
+    "knn": 0.7333333492279053,
+    "gaussian_naive_bayes": 0.7329243421554565,
+    "mlp_neural_network": 0.7300519347190857
+   }
+  },
+  "low_risk": {
+   "input": [
+    1,
+    85,
+    66,
+    29,
+    null,
+    26.6,
+    0.351,
+    31
+   ],
+   "prob": {
+    "decision_tree": 0.0,
+    "random_forest": 0.052325163036584854,
+    "extra_trees": 0.10835530608892441,
+    "gradient_boosting": 0.0716562271118164,
+    "hist_gradient_boosting": 0.008450627326965332,
+    "adaboost": 0.1480385959148407,
+    "logistic_regression": 0.05598694086074829,
+    "svm_rbf": 0.05360477790236473,
+    "knn": 0.0,
+    "gaussian_naive_bayes": 0.01478078868240118,
+    "mlp_neural_network": 0.020931124687194824
+   }
+  },
+  "high_risk": {
+   "input": [
+    8,
+    183,
+    64,
+    null,
+    null,
+    23.3,
+    0.672,
+    32
+   ],
+   "prob": {
+    "decision_tree": 1.0,
+    "random_forest": 0.7626774311065674,
+    "extra_trees": 0.8063368797302246,
+    "gradient_boosting": 0.8443986773490906,
+    "hist_gradient_boosting": 0.8932678699493408,
+    "adaboost": 0.5693068504333496,
+    "logistic_regression": 0.8509698510169983,
+    "svm_rbf": 0.8265160322189331,
+    "knn": 0.6000000238418579,
+    "gaussian_naive_bayes": 0.8730086088180542,
+    "mlp_neural_network": 0.7963237166404724
+   }
+  },
+  "all_present": {
+   "input": [
+    2,
+    120,
+    70,
+    30,
+    100,
+    28.0,
+    0.5,
+    40
+   ],
+   "prob": {
+    "decision_tree": 0.6192209124565125,
+    "random_forest": 0.27202311158180237,
+    "extra_trees": 0.36854931712150574,
+    "gradient_boosting": 0.2130371332168579,
+    "hist_gradient_boosting": 0.16579854488372803,
+    "adaboost": 0.2940259277820587,
+    "logistic_regression": 0.26975440979003906,
+    "svm_rbf": 0.3275928795337677,
+    "knn": 0.4000000059604645,
+    "gaussian_naive_bayes": 0.08407054841518402,
+    "mlp_neural_network": 0.24320515990257263
+   }
+  }
+ }
+}

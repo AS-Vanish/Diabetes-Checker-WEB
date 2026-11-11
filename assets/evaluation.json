@@ -1,0 +1,106 @@
+{
+  "source": "Derived from Accuracy/Recall/F1 in assets/models.json by tools/derive_evaluation.py",
+  "testSetSize": 231,
+  "testPositives": 81,
+  "note": "Confusion matrices and precision are derived exactly (not estimated) and reproduce all three published metrics for every model. ROC curves need per-sample test scores that are not shipped with the project, so they are intentionally absent.",
+  "baselineMedians": {
+    "Pregnancies": 3.0,
+    "Glucose": 117.0,
+    "BloodPressure": 72.0,
+    "SkinThickness": 29.0,
+    "Insulin": 126.0,
+    "BMI": 32.400002,
+    "DiabetesPedigreeFunction": 0.385,
+    "Age": 30.0
+  },
+  "models": {
+    "decision_tree": {
+      "tp": 62,
+      "fp": 39,
+      "fn": 19,
+      "tn": 111,
+      "precision": 61.39,
+      "specificity": 74.0
+    },
+    "random_forest": {
+      "tp": 47,
+      "fp": 26,
+      "fn": 34,
+      "tn": 124,
+      "precision": 64.38,
+      "specificity": 82.67
+    },
+    "extra_trees": {
+      "tp": 54,
+      "fp": 34,
+      "fn": 27,
+      "tn": 116,
+      "precision": 61.36,
+      "specificity": 77.33
+    },
+    "gradient_boosting": {
+      "tp": 42,
+      "fp": 21,
+      "fn": 39,
+      "tn": 129,
+      "precision": 66.67,
+      "specificity": 86.0
+    },
+    "hist_gradient_boosting": {
+      "tp": 50,
+      "fp": 23,
+      "fn": 31,
+      "tn": 127,
+      "precision": 68.49,
+      "specificity": 84.67
+    },
+    "adaboost": {
+      "tp": 37,
+      "fp": 14,
+      "fn": 44,
+      "tn": 136,
+      "precision": 72.55,
+      "specificity": 90.67
+    },
+    "logistic_regression": {
+      "tp": 57,
+      "fp": 31,
+      "fn": 24,
+      "tn": 119,
+      "precision": 64.77,
+      "specificity": 79.33
+    },
+    "svm_rbf": {
+      "tp": 40,
+      "fp": 22,
+      "fn": 41,
+      "tn": 128,
+      "precision": 64.52,
+      "specificity": 85.33
+    },
+    "knn": {
+      "tp": 43,
+      "fp": 20,
+      "fn": 38,
+      "tn": 130,
+      "precision": 68.25,
+      "specificity": 86.67
+    },
+    "gaussian_naive_bayes": {
+      "tp": 47,
+      "fp": 29,
+      "fn": 34,
+      "tn": 121,
+      "precision": 61.84,
+      "specificity": 80.67
+    },
+    "mlp_neural_network": {
+      "tp": 46,
+      "fp": 25,
+      "fn": 35,
+      "tn": 125,
+      "precision": 64.79,
+      "specificity": 83.33
+    }
+  }
+}

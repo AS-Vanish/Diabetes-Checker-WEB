@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browser-only multi-model diabetes risk assessment (research & education) · ارزیابی ریسک دیابت با ۱۱ مدل، اجرا در مرورگر">
+  <meta name="color-scheme" content="light dark">
+  <title>Diabetes Checker · Professional 2.0</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M16 6c4 5 7 8.4 7 12a7 7 0 0 1-14 0c0-3.600 3-7 7-12z' fill='white'/%3E%3C/svg%3E">
+  <script>
+    // Apply saved/system theme before first paint (avoids a flash).
+    try {
+      const t = localStorage.getItem("dc.theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = t;
+      const l = localStorage.getItem("dc.lang") || ((navigator.language || "fa").toLowerCase().startsWith("fa") ? "fa" : "en");
+      document.documentElement.lang = l; document.documentElement.dir = l === "fa" ? "rtl" : "ltr";
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./vendor/onnxruntime/ort.min.js"></script>
+  <script src="./vendor/chartjs/chart.umd.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">پرش به محتوا</a>
+
+  <header class="topbar">
+    <div class="topbar-in">
+      <a class="brand" href="#/dashboard" aria-label="Diabetes Checker">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="22" height="22"><path d="M16 4c4.500 5.600 8 9.500 8 13.500a8 8 0 0 1-16 0C8 13.500 11.500 9.600 16 4z" fill="currentColor"/></svg></span>
+        <span class="brand-text"><b data-i18n="brand">Diabetes Checker</b><small>Professional 2.0</small></span>
+      </a>
+      <nav class="tabs" id="tabs" aria-label="Main">
+        <a href="#/dashboard" data-route="dashboard" data-i18n="nav.dashboard"></a>
+        <a href="#/assess" data-route="assess" data-i18n="nav.assess"></a>
+        <a href="#/compare" data-route="compare" data-i18n="nav.compare"></a>
+        <a href="#/history" data-route="history" data-i18n="nav.history"></a>
+        <a href="#/about" data-route="about" data-i18n="nav.about"></a>
+      </nav>
+      <div class="tools">
+        <button class="icon-btn" id="langBtn" type="button" aria-label="Language"><span id="langLabel">EN</span></button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme">
+          <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M2 12h2M20 12h2M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.800A9 9 0 1 1 11.200 3a7 7 0 0 0 9.800 9.800z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner" role="note"><span data-i18n="banner"></span></div>
+
+  <main id="main" class="wrap" tabindex="-1">
+    <!-- ================= DASHBOARD ================= -->
+    <section class="view" data-view="dashboard" hidden>
+      <div class="hero">
+        <div>
+          <p class="eyebrow">MACHINE LEARNING · ONNX RUNTIME WEB · 100% CLIENT-SIDE</p>
+          <h1 data-i18n="dash.title"></h1>
+          <p class="lead" data-i18n="dash.lead"></p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#/assess" data-i18n="dash.cta"></a>
+            <button class="btn" id="preloadBtn" type="button" data-i18n="dash.preload"></button>
+          </div>
+        </div>
+        <div id="runtimeStatus" class="status" role="status" aria-live="polite"></div>
+      </div>
+      <div class="stats" id="statCards"></div>
+      <div class="grid2">
+        <article class="card"><h2 data-i18n="dash.aucChart"></h2><div class="chart-box"><canvas id="chAucDash" role="img"></canvas></div></article>
+        <article class="card"><h2 data-i18n="dash.loadStatus"></h2><div id="modelStatusGrid" class="mgrid"></div></article>
+      </div>
+    </section>
+
+    <!-- ================= ASSESS ================= -->
+    <section class="view" data-view="assess" hidden>
+      <div class="grid-assess">
+        <article class="card">
+          <div class="card-head">
+            <div><h2 data-i18n="assess.title"></h2><p class="muted" data-i18n="assess.sub"></p></div>
+            <div class="row-btns">
+              <button class="btn sm" id="sampleBtn" type="button" data-i18n="assess.sample"></button>
+              <button class="btn sm ghost" id="resetBtn" type="button" data-i18n="assess.reset"></button>
+            </div>
+          </div>
+          <form id="form" novalidate>
+            <div id="fields" class="fields"></div>
+            <div class="opts">
+              <fieldset class="seg" id="modeSeg"><legend data-i18n="assess.mode"></legend>
+                <label><input type="radio" name="mode" value="all" checked><span data-i18n="assess.modeAll"></span></label>
+                <label><input type="radio" name="mode" value="one"><span data-i18n="assess.modeOne"></span></label>
+              </fieldset>
+              <label class="sel" id="modelWrap" hidden><span data-i18n="assess.model"></span><select id="modelSelect"></select></label>
+              <label class="sel"><span data-i18n="assess.threshold"></span>
+                <select id="thresholdMode"><option value="tuned" data-i18n="assess.thTuned"></option><option value="0.5" data-i18n="assess.th05"></option></select>
+              </label>
+            </div>
+            <div class="submit-row">
+              <button id="runBtn" class="btn primary lg" type="submit" data-i18n="assess.run"></button>
+              <div id="progress" class="progress" hidden><div class="bar"><i id="progressBar"></i></div><span id="progressText" class="muted"></span></div>
+            </div>
+            <div id="formError" class="alert err" role="alert" hidden></div>
+          </form>
+        </article>
+
+        <aside class="card tips">
+          <h3 data-i18n="assess.guideTitle"></h3>
+          <ul id="guideList" class="plain"></ul>
+        </aside>
+      </div>
+
+      <div id="resultArea" hidden>
+        <article class="card" aria-live="polite">
+          <div class="card-head"><h2 data-i18n="res.title"></h2>
+            <div class="row-btns"><button class="btn sm" id="pdfBtn" type="button" data-i18n="res.pdf"></button><button class="btn sm ghost" id="saveBtn" type="button" data-i18n="res.save"></button></div>
+          </div>
+          <div id="overall" class="overall"></div>
+          <div id="resultGrid" class="rgrid"></div>
+          <p class="muted small" data-i18n="res.disclaimer"></p>
+        </article>
+        <div class="grid2">
+          <article class="card"><h2 data-i18n="res.chart"></h2><div class="chart-box tall"><canvas id="chProbs" role="img"></canvas></div></article>
+          <article class="card" id="xaiCard">
+            <div class="card-head"><div><h2 data-i18n="xai.title"></h2><p class="muted small" data-i18n="xai.sub"></p></div>
+              <label class="sel inline"><span data-i18n="assess.model"></span><select id="xaiModel"></select></label></div>
+            <div id="xaiBody"><div class="chart-box tall"><canvas id="chXai" role="img"></canvas></div></div>
+            <div id="xaiText" class="xai-text"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COMPARE ================= -->
+    <section class="view" data-view="compare" hidden>
+      <div class="card">
+        <div class="card-head"><div><h2 data-i18n="cmp.title"></h2><p class="muted" data-i18n="cmp.sub"></p></div>
+          <button class="btn sm" id="benchBtn" type="button" data-i18n="cmp.bench"></button></div>
+        <div id="benchProgress" class="progress" hidden><div class="bar"><i id="benchBar"></i></div><span id="benchText" class="muted"></span></div>
+        <div class="table-wrap"><table id="cmpTable"></table></div>
+        <p class="muted small" id="cmpNote"></p>
+      </div>
+      <div class="grid2">
+        <article class="card"><div class="card-head"><h2 data-i18n="cmp.chart"></h2>
+          <label class="sel inline"><span data-i18n="cmp.metric"></span><select id="metricSelect"></select></label></div>
+          <div class="chart-box tall"><canvas id="chMetric" role="img"></canvas></div></article>
+        <article class="card"><h2 data-i18n="cmp.radar"></h2><div class="chart-box tall"><canvas id="chRadar" role="img"></canvas></div></article>
+      </div>
+      <div class="grid2">
+        <article class="card"><div class="card-head"><h2 data-i18n="cmp.cm"></h2>
+          <label class="sel inline"><span data-i18n="assess.model"></span><select id="cmModel"></select></label></div>
+          <div id="cmBox"></div><p class="muted small" data-i18n="cmp.cmNote"></p></article>
+        <article class="card"><h2 data-i18n="cmp.roc"></h2>
+          <div class="unsupported" id="rocBox"></div>
+          <div class="chart-box"><canvas id="chAuc" role="img"></canvas></div></article>
+      </div>
+    </section>
+
+    <!-- ================= HISTORY ================= -->
+    <section class="view" data-view="history" hidden>
+      <div class="card">
+        <div class="card-head"><div><h2 data-i18n="hist.title"></h2><p class="muted" data-i18n="hist.sub"></p></div>
+          <button class="btn sm danger" id="clearHist" type="button" data-i18n="hist.clear"></button></div>
+        <div class="alert warn" data-i18n="hist.warn"></div>
+        <div id="histList" class="hlist"></div>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section class="view" data-view="about" hidden>
+      <div class="grid2">
+        <article class="card prose" id="aboutMedical"></article>
+        <article class="card prose" id="aboutTech"></article>
+      </div>
+      <article class="card prose" id="aboutModels"></article>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div id="footText"></div>
+    <div class="muted small">v2.0.0 · MIT · <a href="https://github.com/AS-Vanish/Diabetes-Checker-WEB" rel="noopener">GitHub</a></div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div id="reportStage" class="report-stage" aria-hidden="true"></div>
+  <noscript><div class="alert err" style="margin:20px">JavaScript is required · برای اجرای برنامه جاوااسکریپت لازم است.</div></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

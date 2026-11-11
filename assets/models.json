@@ -1,0 +1,191 @@
+{
+  "features": [
+    {
+      "key": "Pregnancies",
+      "label": "تعداد بارداری",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "key": "Glucose",
+      "label": "گلوکز",
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "default": 148
+    },
+    {
+      "key": "BloodPressure",
+      "label": "فشار خون دیاستولیک",
+      "min": 0,
+      "max": 200,
+      "step": 1,
+      "default": 72
+    },
+    {
+      "key": "SkinThickness",
+      "label": "ضخامت چین پوستی",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 35
+    },
+    {
+      "key": "Insulin",
+      "label": "انسولین",
+      "min": 0,
+      "max": 900,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "key": "BMI",
+      "label": "شاخص توده بدنی (BMI)",
+      "min": 0,
+      "max": 80,
+      "step": 0.1,
+      "default": 33.6
+    },
+    {
+      "key": "DiabetesPedigreeFunction",
+      "label": "سابقه خانوادگی دیابت (DPF)",
+      "min": 0,
+      "max": 3,
+      "step": 0.001,
+      "default": 0.627
+    },
+    {
+      "key": "Age",
+      "label": "سن",
+      "min": 1,
+      "max": 120,
+      "step": 1,
+      "default": 50
+    }
+  ],
+  "models": [
+    {
+      "id": "decision_tree",
+      "name": "Decision Tree",
+      "file": "decision_tree.onnx",
+      "threshold": 0.25,
+      "accuracy": 74.89,
+      "recall": 76.54,
+      "f1": 68.13,
+      "auc": 75.69
+    },
+    {
+      "id": "random_forest",
+      "name": "Random Forest",
+      "file": "random_forest.onnx",
+      "threshold": 0.1571,
+      "accuracy": 74.03,
+      "recall": 58.02,
+      "f1": 61.04,
+      "auc": 83.15
+    },
+    {
+      "id": "extra_trees",
+      "name": "Extra Trees",
+      "file": "extra_trees.onnx",
+      "threshold": 0.2443,
+      "accuracy": 73.59,
+      "recall": 66.67,
+      "f1": 63.91,
+      "auc": 84.08
+    },
+    {
+      "id": "gradient_boosting",
+      "name": "Gradient Boosting",
+      "file": "gradient_boosting.onnx",
+      "threshold": 0.1575,
+      "accuracy": 74.03,
+      "recall": 51.85,
+      "f1": 58.33,
+      "auc": 82.66
+    },
+    {
+      "id": "hist_gradient_boosting",
+      "name": "Hist Gradient Boosting",
+      "file": "hist_gradient_boosting.onnx",
+      "threshold": 0.0923,
+      "accuracy": 76.62,
+      "recall": 61.73,
+      "f1": 64.94,
+      "auc": 82.13
+    },
+    {
+      "id": "adaboost",
+      "name": "AdaBoost",
+      "file": "adaboost.onnx",
+      "threshold": 0.278,
+      "accuracy": 74.89,
+      "recall": 45.68,
+      "f1": 56.06,
+      "auc": 83.36
+    },
+    {
+      "id": "logistic_regression",
+      "name": "Logistic Regression",
+      "file": "logistic_regression.onnx",
+      "threshold": 0.249,
+      "accuracy": 76.19,
+      "recall": 70.37,
+      "f1": 67.46,
+      "auc": 83.65
+    },
+    {
+      "id": "svm_rbf",
+      "name": "SVM (RBF)",
+      "file": "svm_rbf.onnx",
+      "threshold": 0.1936,
+      "accuracy": 72.73,
+      "recall": 49.38,
+      "f1": 55.94,
+      "auc": 82.79
+    },
+    {
+      "id": "knn",
+      "name": "K-Nearest Neighbors",
+      "file": "knn.onnx",
+      "threshold": 0.1908,
+      "accuracy": 74.89,
+      "recall": 53.09,
+      "f1": 59.72,
+      "auc": 82.61
+    },
+    {
+      "id": "gaussian_naive_bayes",
+      "name": "Gaussian Naive Bayes",
+      "file": "gaussian_naive_bayes.onnx",
+      "threshold": 0.0509,
+      "accuracy": 72.73,
+      "recall": 58.02,
+      "f1": 59.87,
+      "auc": 80.37
+    },
+    {
+      "id": "mlp_neural_network",
+      "name": "MLP Neural Network",
+      "file": "mlp_neural_network.onnx",
+      "threshold": 0.1984,
+      "accuracy": 74.03,
+      "recall": 56.79,
+      "f1": 60.53,
+      "auc": 84.31
+    }
+  ],
+  "notes": {
+    "missing_zero_features": [
+      "Glucose",
+      "BloodPressure",
+      "SkinThickness",
+      "Insulin",
+      "BMI"
+    ],
+    "thresholds": "Thresholds are tuned on out-of-fold training predictions; default 0.50 is also available.",
+    "metrics": "Test metrics from model_comparison_v2.csv; research results, not clinical validation."
+  }
+}
